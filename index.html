@@ -18,6 +18,7 @@
 
 
 body{
+    position: relative;
 
     min-height:100vh;
     overflow:hidden;
@@ -52,7 +53,10 @@ background-position:0% 50%;
 
 
 .card{
-
+    
+position: relative;
+z-index: 10;
+    
     width:90%;
     max-width:500px;
 
@@ -161,18 +165,12 @@ transform:translate(-50%,-50%) scale(1.08);
 
 }
 
-
-
 .coracao{
-
-    position:fixed;
-
-    color:#ff2d55;
-
-    pointer-events:none;
-
-    animation:cair linear forwards;
-
+    position: fixed;
+    color: #ff2d55;
+    pointer-events: none;
+    animation: cair linear forwards;
+    z-index: 1;
 }
 
 
