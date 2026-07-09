@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>❤️ Vamos sair?</title>
+<title>Vamos sair?</title>
 
 <style>
 
@@ -13,12 +13,11 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 
 body{
-    position: relative;
 
     min-height:100vh;
     overflow:hidden;
@@ -29,6 +28,7 @@ body{
 
     background:linear-gradient(-45deg,#ff4d6d,#ff8fa3,#ffc2d1,#ff758f);
     background-size:400% 400%;
+
     animation:fundo 12s ease infinite;
 
 }
@@ -53,10 +53,10 @@ background-position:0% 50%;
 
 
 .card{
-    
-position: relative;
+  
+  position: relative;
 z-index: 10;
-    
+
     width:90%;
     max-width:500px;
 
@@ -94,9 +94,9 @@ h1{
 
     position:relative;
 
-    width:100%;
+    height:150px;
 
-    height:180px;
+    width:100%;
 
 }
 
@@ -114,16 +114,21 @@ button{
 
     font-weight:bold;
 
+    cursor:pointer;
+
 }
 
 
 
 #sim{
+  
+ 
 
     position:absolute;
 
     left:50%;
-    top:50%;
+
+    top:10%;
 
     transform:translate(-50%,-50%);
 
@@ -165,15 +170,15 @@ transform:translate(-50%,-50%) scale(1.08);
 
 }
 
-.coracao{
+
+  .coracao{
     position: fixed;
     color: #ff2d55;
     pointer-events: none;
     animation: cair linear forwards;
     z-index: 1;
 }
-
-
+  
 
 @keyframes cair{
 
@@ -221,14 +226,14 @@ font-weight:bold;
 <div class="card">
 
 
-<h1>💖 Vamos sair? 💖</h1>
+<h1>Vamos sair ? </h1>
 
 
 <div class="botoes">
 
 
 <button id="sim">
-SIM ❤️
+SIM 
 </button>
 
 
@@ -251,152 +256,123 @@ NÃO 😅
 
 
 const btnNao=document.getElementById("nao");
-const btnSim=document.getElementById("sim");
+
 const area=document.querySelector(".botoes");
+
+const btnSim=document.getElementById("sim");
 
 
 
 const frases=[
 
 "Tem certeza? 🤔",
+
 "Pensa bem 😂",
+
 "Vai perder essa? 😅",
-"Clique no SIM ❤️",
-"Nem tenta 😜",
+
+"Clique no SIM pfv ❤️",
+
+"Não adianta 😜",
+
 "Quase! 😂",
+  
+  "Desista!", 
+  
+  "CHEGA", 
+
 "Você não consegue 😆"
 
 ];
 
 
 
-let posicaoInicial;
+let centroX;
+
+let centroY;
 
 
 
-function iniciar(){
+function atualizarCentro(){
+
+centroX =
+btnSim.offsetLeft +
+(btnSim.offsetWidth/2);
 
 
-posicaoInicial={
-
-x:btnNao.offsetLeft,
-
-y:btnNao.offsetTop
-
-};
-
+centroY =
+btnSim.offsetTop +
+(btnSim.offsetHeight/2);
 
 }
-
-
-
-window.onload=iniciar;
 
 
 
 function fugir(){
 
 
-const limiteCard=area.getBoundingClientRect();
-
-const simBox=btnSim.getBoundingClientRect();
-
-const naoWidth=btnNao.offsetWidth;
-
-const naoHeight=btnNao.offsetHeight;
+atualizarCentro();
 
 
+const distanciaMinima=120;
 
-let novaX;
-let novaY;
+const distanciaMaxima=150;
+
+
+let angulo=
+Math.random()*Math.PI*2;
 
 
 
-let tentativas=0;
+let distancia=
+distanciaMinima+
+Math.random()*
+(distanciaMaxima-distanciaMinima);
 
 
 
-do{
-
-
-let distancia=120+Math.random()*50;
-
-let angulo=Math.random()*Math.PI*2;
-
-
-
-let centroSimX=
-simBox.left+simBox.width/2;
-
-
-let centroSimY=
-simBox.top+simBox.height/2;
+let novoX =
+centroX +
+Math.cos(angulo)*distancia -
+(btnNao.offsetWidth/2);
 
 
 
-novaX =
-centroSimX+
-Math.cos(angulo)*distancia-
-limiteCard.left-
-naoWidth/2;
+let novoY =
+centroY +
+Math.sin(angulo)*distancia -
+(btnNao.offsetHeight/2);
 
 
 
-novaY =
-centroSimY+
-Math.sin(angulo)*distancia-
-limiteCard.top-
-naoHeight/2;
 
+// limite da área
 
-
-tentativas++;
-
-
-
-}
-
-while(
-
-(
-
-Math.abs(novaX-btnSim.offsetLeft)<90 &&
-
-Math.abs(novaY-btnSim.offsetTop)<70
-
-)
-
-&& tentativas <100
-
-);
-
-
-
-// trava dentro da div
-
-novaX=Math.max(
+novoX=Math.max(
 0,
 Math.min(
-novaX,
-area.offsetWidth-naoWidth
+novoX,
+area.offsetWidth-btnNao.offsetWidth
 )
 );
 
 
-
-novaY=Math.max(
+novoY=Math.max(
 0,
 Math.min(
-novaY,
-area.offsetHeight-naoHeight
+novoY,
+area.offsetHeight-btnNao.offsetHeight
 )
 );
 
 
 
-btnNao.style.left=novaX+"px";
+btnNao.style.left=
+novoX+"px";
 
-btnNao.style.top=novaY+"px";
+
+btnNao.style.top=
+novoY+"px";
 
 
 
@@ -404,6 +380,20 @@ btnNao.innerText=
 frases[Math.floor(Math.random()*frases.length)];
 
 }
+
+
+
+window.onload=function(){
+
+// posição inicial
+
+btnNao.style.left="65%";
+
+btnNao.style.top="50%";
+
+btnNao.style.transform="translateY(-50%)";
+
+};
 
 
 
@@ -431,7 +421,6 @@ fugir();
 
 function criarCoracao(){
 
-
 const c=document.createElement("div");
 
 c.className="coracao";
@@ -439,24 +428,27 @@ c.className="coracao";
 c.innerHTML="❤️";
 
 
-c.style.left=Math.random()*100+"vw";
+c.style.left=
+Math.random()*100+"vw";
 
 
 c.style.fontSize=
-15+Math.random()*25+"px";
+(15+Math.random()*25)+"px";
 
 
 c.style.animationDuration=
-3+Math.random()*4+"s";
-
+(3+Math.random()*4)+"s";
 
 
 document.body.appendChild(c);
 
 
 
-setTimeout(()=>c.remove(),7000);
+setTimeout(()=>{
 
+c.remove();
+
+},7000);
 
 }
 
@@ -485,14 +477,16 @@ setTimeout(criarCoracao,i*20);
 
 setTimeout(()=>{
 
+
 window.location.href=
 "https://wa.me/5514996236447?text=Oi!%20Aceitei%20o%20convite!%20❤️";
+
 
 },1800);
 
 
-
 };
+
 
 
 </script>
