@@ -13,7 +13,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 
@@ -28,7 +28,6 @@ body{
 
     background:linear-gradient(-45deg,#ff4d6d,#ff8fa3,#ffc2d1,#ff758f);
     background-size:400% 400%;
-
     animation:fundo 12s ease infinite;
 
 }
@@ -91,9 +90,9 @@ h1{
 
     position:relative;
 
-    height:180px;
-
     width:100%;
+
+    height:180px;
 
 }
 
@@ -111,8 +110,6 @@ button{
 
     font-weight:bold;
 
-    cursor:pointer;
-
 }
 
 
@@ -122,7 +119,6 @@ button{
     position:absolute;
 
     left:50%;
-
     top:50%;
 
     transform:translate(-50%,-50%);
@@ -178,6 +174,7 @@ transform:translate(-50%,-50%) scale(1.08);
     animation:cair linear forwards;
 
 }
+
 
 
 @keyframes cair{
@@ -256,119 +253,152 @@ NÃO 😅
 
 
 const btnNao=document.getElementById("nao");
-
-const area=document.querySelector(".botoes");
-
 const btnSim=document.getElementById("sim");
+const area=document.querySelector(".botoes");
 
 
 
 const frases=[
 
 "Tem certeza? 🤔",
-
 "Pensa bem 😂",
-
 "Vai perder essa? 😅",
-
 "Clique no SIM ❤️",
-
 "Nem tenta 😜",
-
 "Quase! 😂",
-
 "Você não consegue 😆"
 
 ];
 
 
 
-let centroX;
-
-let centroY;
+let posicaoInicial;
 
 
 
-function atualizarCentro(){
-
-centroX =
-btnSim.offsetLeft +
-(btnSim.offsetWidth/2);
+function iniciar(){
 
 
-centroY =
-btnSim.offsetTop +
-(btnSim.offsetHeight/2);
+posicaoInicial={
+
+x:btnNao.offsetLeft,
+
+y:btnNao.offsetTop
+
+};
+
 
 }
+
+
+
+window.onload=iniciar;
 
 
 
 function fugir(){
 
 
-atualizarCentro();
+const limiteCard=area.getBoundingClientRect();
 
+const simBox=btnSim.getBoundingClientRect();
 
-const distanciaMinima=120;
+const naoWidth=btnNao.offsetWidth;
 
-const distanciaMaxima=150;
-
-
-let angulo=
-Math.random()*Math.PI*2;
+const naoHeight=btnNao.offsetHeight;
 
 
 
-let distancia=
-distanciaMinima+
-Math.random()*
-(distanciaMaxima-distanciaMinima);
+let novaX;
+let novaY;
 
 
 
-let novoX =
-centroX +
-Math.cos(angulo)*distancia -
-(btnNao.offsetWidth/2);
+let tentativas=0;
 
 
 
-let novoY =
-centroY +
-Math.sin(angulo)*distancia -
-(btnNao.offsetHeight/2);
+do{
+
+
+let distancia=120+Math.random()*50;
+
+let angulo=Math.random()*Math.PI*2;
 
 
 
+let centroSimX=
+simBox.left+simBox.width/2;
 
-// limite da área
 
-novoX=Math.max(
+let centroSimY=
+simBox.top+simBox.height/2;
+
+
+
+novaX =
+centroSimX+
+Math.cos(angulo)*distancia-
+limiteCard.left-
+naoWidth/2;
+
+
+
+novaY =
+centroSimY+
+Math.sin(angulo)*distancia-
+limiteCard.top-
+naoHeight/2;
+
+
+
+tentativas++;
+
+
+
+}
+
+while(
+
+(
+
+Math.abs(novaX-btnSim.offsetLeft)<90 &&
+
+Math.abs(novaY-btnSim.offsetTop)<70
+
+)
+
+&& tentativas <100
+
+);
+
+
+
+// trava dentro da div
+
+novaX=Math.max(
 0,
 Math.min(
-novoX,
-area.offsetWidth-btnNao.offsetWidth
+novaX,
+area.offsetWidth-naoWidth
 )
 );
 
 
-novoY=Math.max(
+
+novaY=Math.max(
 0,
 Math.min(
-novoY,
-area.offsetHeight-btnNao.offsetHeight
+novaY,
+area.offsetHeight-naoHeight
 )
 );
 
 
 
-btnNao.style.left=
-novoX+"px";
+btnNao.style.left=novaX+"px";
 
-
-btnNao.style.top=
-novoY+"px";
+btnNao.style.top=novaY+"px";
 
 
 
@@ -376,20 +406,6 @@ btnNao.innerText=
 frases[Math.floor(Math.random()*frases.length)];
 
 }
-
-
-
-window.onload=function(){
-
-// posição inicial
-
-btnNao.style.left="65%";
-
-btnNao.style.top="50%";
-
-btnNao.style.transform="translateY(-50%)";
-
-};
 
 
 
@@ -417,6 +433,7 @@ fugir();
 
 function criarCoracao(){
 
+
 const c=document.createElement("div");
 
 c.className="coracao";
@@ -424,27 +441,24 @@ c.className="coracao";
 c.innerHTML="❤️";
 
 
-c.style.left=
-Math.random()*100+"vw";
+c.style.left=Math.random()*100+"vw";
 
 
 c.style.fontSize=
-(15+Math.random()*25)+"px";
+15+Math.random()*25+"px";
 
 
 c.style.animationDuration=
-(3+Math.random()*4)+"s";
+3+Math.random()*4+"s";
+
 
 
 document.body.appendChild(c);
 
 
 
-setTimeout(()=>{
+setTimeout(()=>c.remove(),7000);
 
-c.remove();
-
-},7000);
 
 }
 
@@ -473,16 +487,14 @@ setTimeout(criarCoracao,i*20);
 
 setTimeout(()=>{
 
-
 window.location.href=
 "https://wa.me/5514996236447?text=Oi!%20Aceitei%20o%20convite!%20❤️";
-
 
 },1800);
 
 
-};
 
+};
 
 
 </script>
