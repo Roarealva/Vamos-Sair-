@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -15,25 +16,40 @@
     font-family:Arial,Helvetica,sans-serif;
 }
 
+
 body{
-    overflow:hidden;
+
     min-height:100vh;
-    width:100%;
+    overflow:hidden;
+
     display:flex;
     justify-content:center;
     align-items:center;
 
     background:linear-gradient(-45deg,#ff4d6d,#ff8fa3,#ffc2d1,#ff758f);
     background-size:400% 400%;
+
     animation:fundo 12s ease infinite;
+
 }
 
 
 @keyframes fundo{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+
+0%{
+background-position:0% 50%;
 }
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+
 
 
 .card{
@@ -41,10 +57,11 @@ body{
     width:90%;
     max-width:500px;
 
-    background:rgba(255,255,255,.15);
-    backdrop-filter:blur(18px);
+    padding:35px 20px;
 
-    padding:30px 20px;
+    background:rgba(255,255,255,.18);
+
+    backdrop-filter:blur(15px);
 
     border-radius:25px;
 
@@ -52,31 +69,15 @@ body{
 
     box-shadow:0 15px 40px rgba(0,0,0,.25);
 
-    animation:entrada 1s;
-
 }
 
-
-@keyframes entrada{
-
-from{
-    transform:scale(.4);
-    opacity:0;
-}
-
-to{
-    transform:scale(1);
-    opacity:1;
-}
-
-}
 
 
 h1{
 
     color:white;
 
-    font-size:clamp(1.8rem,8vw,3em);
+    font-size:clamp(30px,8vw,50px);
 
     margin-bottom:35px;
 
@@ -88,13 +89,11 @@ h1{
 
 .botoes{
 
-    display:flex;
+    position:relative;
 
-    gap:20px;
+    height:180px;
 
-    justify-content:center;
-
-    flex-wrap:wrap;
+    width:100%;
 
 }
 
@@ -114,17 +113,25 @@ button{
 
     cursor:pointer;
 
-    transition:.25s;
-
 }
 
 
 
 #sim{
 
+    position:absolute;
+
+    left:50%;
+
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
     background:#2ecc71;
 
     color:white;
+
+    z-index:3;
 
     animation:pulsar 1.4s infinite;
 
@@ -136,22 +143,9 @@ button{
 
 50%{
 
-transform:scale(1.08);
+transform:translate(-50%,-50%) scale(1.08);
 
 }
-
-}
-
-
-
-#sim:hover{
-
-transform:scale(1.2);
-
-box-shadow:
-0 0 20px #2ecc71,
-0 0 40px #2ecc71,
-0 0 70px #2ecc71;
 
 }
 
@@ -159,11 +153,15 @@ box-shadow:
 
 #nao{
 
+    position:absolute;
+
     background:#e74c3c;
 
     color:white;
 
-    position:relative;
+    z-index:2;
+
+    transition:.25s ease;
 
 }
 
@@ -175,14 +173,11 @@ box-shadow:
 
     color:#ff2d55;
 
-    font-size:24px;
+    pointer-events:none;
 
     animation:cair linear forwards;
 
-    pointer-events:none;
-
 }
-
 
 
 @keyframes cair{
@@ -209,16 +204,15 @@ opacity:0;
 
 #mensagem{
 
-margin-top:25px;
+margin-top:20px;
 
 color:white;
 
-font-size:clamp(18px,5vw,26px);
+font-size:24px;
 
 font-weight:bold;
 
 }
-
 
 
 </style>
@@ -263,6 +257,11 @@ NÃO 😅
 
 const btnNao=document.getElementById("nao");
 
+const area=document.querySelector(".botoes");
+
+const btnSim=document.getElementById("sim");
+
+
 
 const frases=[
 
@@ -284,52 +283,113 @@ const frases=[
 
 
 
+let centroX;
+
+let centroY;
+
+
+
+function atualizarCentro(){
+
+centroX =
+btnSim.offsetLeft +
+(btnSim.offsetWidth/2);
+
+
+centroY =
+btnSim.offsetTop +
+(btnSim.offsetHeight/2);
+
+}
+
+
+
 function fugir(){
 
 
-const largura=window.innerWidth;
-
-const altura=window.innerHeight;
+atualizarCentro();
 
 
-const larguraBotao=btnNao.offsetWidth;
+const distanciaMinima=120;
 
-const alturaBotao=btnNao.offsetHeight;
-
-
-const margem=20;
+const distanciaMaxima=150;
 
 
-
-const novaPosicaoX =
-Math.random() *
-(largura - larguraBotao - margem);
+let angulo=
+Math.random()*Math.PI*2;
 
 
 
-const novaPosicaoY =
-Math.random() *
-(altura - alturaBotao - margem);
+let distancia=
+distanciaMinima+
+Math.random()*
+(distanciaMaxima-distanciaMinima);
 
 
 
-btnNao.style.position="fixed";
+let novoX =
+centroX +
+Math.cos(angulo)*distancia -
+(btnNao.offsetWidth/2);
+
+
+
+let novoY =
+centroY +
+Math.sin(angulo)*distancia -
+(btnNao.offsetHeight/2);
+
+
+
+
+// limite da área
+
+novoX=Math.max(
+0,
+Math.min(
+novoX,
+area.offsetWidth-btnNao.offsetWidth
+)
+);
+
+
+novoY=Math.max(
+0,
+Math.min(
+novoY,
+area.offsetHeight-btnNao.offsetHeight
+)
+);
+
 
 
 btnNao.style.left=
-Math.max(margem,novaPosicaoX)+"px";
+novoX+"px";
 
 
 btnNao.style.top=
-Math.max(margem,novaPosicaoY)+"px";
+novoY+"px";
 
 
 
 btnNao.innerText=
 frases[Math.floor(Math.random()*frases.length)];
 
-
 }
+
+
+
+window.onload=function(){
+
+// posição inicial
+
+btnNao.style.left="65%";
+
+btnNao.style.top="50%";
+
+btnNao.style.transform="translateY(-50%)";
+
+};
 
 
 
@@ -354,14 +414,12 @@ fugir();
 
 
 
-function criarCoracao(){
 
+function criarCoracao(){
 
 const c=document.createElement("div");
 
-
 c.className="coracao";
-
 
 c.innerHTML="❤️";
 
@@ -370,13 +428,12 @@ c.style.left=
 Math.random()*100+"vw";
 
 
-c.style.animationDuration=
-(3+Math.random()*4)+"s";
-
-
 c.style.fontSize=
 (15+Math.random()*25)+"px";
 
+
+c.style.animationDuration=
+(3+Math.random()*4)+"s";
 
 
 document.body.appendChild(c);
@@ -388,7 +445,6 @@ setTimeout(()=>{
 c.remove();
 
 },7000);
-
 
 }
 
@@ -403,10 +459,8 @@ setInterval(criarCoracao,250);
 document.getElementById("sim").onclick=function(){
 
 
-
 document.getElementById("mensagem").innerHTML=
 "🥰 Sabia que você aceitaria!";
-
 
 
 for(let i=0;i<80;i++){
@@ -427,7 +481,6 @@ window.location.href=
 },1800);
 
 
-
 };
 
 
@@ -436,5 +489,4 @@ window.location.href=
 
 
 </body>
-
 </html>
